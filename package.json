@@ -1,0 +1,20 @@
+{
+    "name": "suavecito-application-to-netsuite-v1",
+    "version": "1.0.0",
+    "description": "Suavecito Lead Generator",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "aws-serverless-express": "^3.3.6",
+        "cors": "^2.8.5",
+        "crypto": "^1.0.1",
+        "express": "^4.17.1",
+        "node-fetch": "^2.6.0",
+        "oauth-1.0a": "^2.2.6"
+    },
+    "devDependencies": {
+        "claudia": "^5.12.0"
+    }
+}
