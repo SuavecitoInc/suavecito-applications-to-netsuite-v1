@@ -107,7 +107,7 @@ exports.createWholesaleLead = (req, res) => {
       console.log('=========/ RESPONSE START =========/');
       console.log(content);
       console.log('/========= RESPONSE END /=========')
-      res.json(content);
+      res.status(200).json(content);
     } catch (err) {
       console.log(err);
     }
