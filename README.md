@@ -76,6 +76,51 @@ Update: `claudia update`
   }
 }
 ```
+
+### Routes and Controllers
+
+/lead/create
+
+Post Body:
+```javascript
+{
+  businessName: 'Business Name',
+  businessType: 'Business Type (NetSuite List Item ID)',
+  businessWebsite: 'Business Website',
+  businessSocialFB: 'Facebook Name or URL',
+  businessSocialIG: 'Instagram Name or URL',
+  businessSocialYelpo: 'Yelp Name or URL',
+  contactFirstName: 'Contact First Name',
+  contactLastName: 'Contact Last Name',
+  contactEmail: 'Contact Email',
+  mapURL: 'URL to MAP Agreement',
+  businessPhone: 'Business Phone',
+  billingFirstName: 'Billing First Name',
+  billingLastName: 'Billing Last Name',
+  billingPhone: 'Billing Phone',
+  billingTitle: 'Billing Title',
+  billingAddress1: 'Billing Address Line 1',
+  billingAddress2: 'Billing Address Line 2',
+  billingAddress3: 'Billing Address Line 3',
+  billingCity: 'Billing Address City',
+  billingState: 'Billing Address State',
+  billingCountry: 'Billing Address Country',
+  billingZip: 'Billing Addresws Zip',
+  shippingAddress1: 'Shipping Address Line 1',
+  shippingAddress2: 'Shipping Address Line 2',
+  shippingAddress3: 'Shipping Address Line 3',
+  shippingCity: 'Shipping Address City',
+  shippingState: 'Shipping Address State',
+  shippingCountry: 'Shipping Address Country',
+  shippingZip: 'Shipping Addresws Zip'
+}
+```
+
+Response:
+```javascript
+Lead/Customer ID ex: 3987
+```
+
 ### Resources
 - [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/programming-model.html)
 - [RESTlets](https://5657911.app.netsuite.com/app/help/helpcenter.nl?fid=chapter_N2970114.html)
