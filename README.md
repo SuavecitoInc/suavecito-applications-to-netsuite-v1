@@ -12,13 +12,13 @@ Update: `claudia update`
 ```javascript
 {
   "lambda": {
-    "role": "suavecito-application-to-zoho-v2-executor",
-    "name": "suavecito-application-to-zoho-v2",
+    "role": "suavecito-application-to-netsuite-v1-executor",
+    "name": "suavecito-application-to-netsuite-v1",
     "region": "us-west-1"
   },
   "api": {
-    "id": "thfy355kl5",
-    "url": "https://thfy355kl5.execute-api.us-west-1.amazonaws.com/latest"
+    "id": "afp7cff6q4",
+    "url": "https://afp7cff6q4.execute-api.us-west-1.amazonaws.com/latest"
   }
 }
 ```
