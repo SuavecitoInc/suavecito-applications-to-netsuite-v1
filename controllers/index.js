@@ -95,6 +95,7 @@ exports.createWholesaleLead = (req, res) => {
   const header = oauth.toHeader(authorization);
   header.Authorization += ', realm="' + accountID + '"';
   header['content-type'] = 'application/json';
+  header['user-agent'] = 'SuavecitoApplicationsToNetSuite/1.0 (AWS/Lambda US-West-1)';
 
   (async () => {
     try {
