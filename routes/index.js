@@ -1,5 +1,5 @@
-import cors from 'cors';
-import NetSuite from '../controllers/netsuite';
+const cors = require('cors');
+const NetSuite = require('../controllers');
 
 module.exports = app => {
   // verification

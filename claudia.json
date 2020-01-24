@@ -1,0 +1,10 @@
+{
+  "lambda": {
+    "role": "suavecito-application-to-netsuite-v1-executor",
+    "name": "suavecito-application-to-netsuite-v1",
+    "region": "us-west-1"
+  },
+  "api": {
+    "id": "afp7cff6q4"
+  }
+}
