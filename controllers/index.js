@@ -1,6 +1,7 @@
 const fetch = require('node-fetch');
 const OAuth = require('oauth-1.0a');
 const crypto = require('crypto');
+const pdf2base64 = require('pdf-to-base64');
 
 exports.createWholesaleLead = (req, res) => {
   const data = req.body;
@@ -113,4 +114,82 @@ exports.createWholesaleLead = (req, res) => {
       console.log(err);
     }
   })();
+}
+
+exports.attachMapToWholesaleLead = (req, res) => {
+  const data = req.body;
+  // customerId, fileName, fileUrl
+
+  // production
+  const accountID = process.env.NETSUITE_ACCT_ID;
+  const token = {
+    key: process.env.NETSUITE_ACCESS_TOKEN,
+    secret: process.env.NETSUITE_TOKEN_SECRET
+  }
+  const consumer = {
+    key: process.env.NETSUITE_CONSUMER_KEY,
+    secret: process.env.NETSUITE_CONSUMER_SECRET
+  }
+  const requestData = {
+    url: process.env.NETSUITE_USER_ATTACHMENTS_RESTLET_URL,
+    method: 'POST'
+  }
+  const oauth = OAuth({
+    consumer: consumer,
+    signature_method: 'HMAC-SHA1',
+    hash_function(base_string, key) {
+      return crypto
+        .createHmac('sha1', key)
+        .update(base_string)
+        .digest('base64');
+    },
+    realm: accountID
+  });
+
+  pdf2base64(data.mapUrl)
+    .then(base64data => {
+      console.log('RESPONSE:');
+      console.log(base64data);
+
+      // data
+      let fileData = {
+        recordtype: 'file',
+        customerID: Number(data.customerId),
+        fileName: data.fileName,
+        fileContents: base64data,
+        fileDescription: 'This is a CA Resale Certificate',
+        fileType: 'pdf',
+        folder: 753
+      }
+
+      console.log('POSTING TO NETSUITE');
+      const authorization = oauth.authorize(requestData, token);
+      const header = oauth.toHeader(authorization);
+      header.Authorization += ', realm="' + accountID + '"';
+      header['content-type'] = 'application/json';
+      header['user-agent'] = 'SuavecitoApplicationsToNetSuite/1.0 (AWS/Lambda US-West-1)';
+
+      (async () => {
+        try {
+          const response = await fetch(requestData.url, {
+            method: requestData.method,
+            headers: header,
+            body: JSON.stringify(fileData)
+          });
+          const content = await response.json();
+          console.log('RESPONSE ========>');
+          console.log(content);
+
+          res.json(content);
+        } catch (error) {
+          console.log(error);
+          res.status(400).json({ error: error });
+        }
+      })();
+
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(400).json({ error: error });
+    });
 }
