@@ -11,8 +11,9 @@ exports.createWholesaleLead = (req, res) => {
   // clean data
   let leadData = {
     recordtype: 'lead',
-    firstname: data.contactFirstName,
-    lastname: data.contactLastName,
+    contactfirstname: data.contactFirstName,
+    contactlastname: data.contactLastName,
+    contacttitle: data.contactTitle,
     comments: data.contactFirstName + ' ' + data.contactLastName + ' , ' + data.contactTitle,
     companyname: data.businessName,
     email: data.contactEmail,
@@ -21,11 +22,12 @@ exports.createWholesaleLead = (req, res) => {
     custentity_sp_cstmr_facebook: data.businessSocialFB,
     custentity_sp_cstmr_instagram: data.businessSocialIG,
     custentity_sp_cstmr_yelp: data.businessSocialYelp,
-    custentity_sp_map_agreement: data.mapURL,
+    custentity_sp_map_agreement: data.mapURL, // ?
     custentity_sp_lead_source: '2', // Wholesale Application
     phone: data.businessPhone,
     billingfirstname: data.billingFirstName,
     billinglastname: data.billingLastName,
+    billingemail: data.billingEmail,
     billingphone: data.billingPhone,
     billingtitle: data.billingTitle,
     weblead: true,
@@ -58,6 +60,12 @@ exports.createWholesaleLead = (req, res) => {
     });
   } else {
     leadData.addressbook[0].label = "Billing & Shipping Address";
+  }
+
+  if (data.contactFirstName !== data.billingFirstName) {
+    leadData.secondContact = true;
+  } else {
+    leadData.secondContact = false;
   }
 
   console.log('LEAD DATA TO BE INSERTED ========>');
