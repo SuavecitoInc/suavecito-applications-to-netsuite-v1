@@ -79,6 +79,7 @@ Update: `claudia update`
 
 ### Routes and Controllers
 
+#### Lead Creation
 /lead/create
 
 Post Body:
@@ -118,7 +119,24 @@ Post Body:
 
 Response:
 ```javascript
-Lead/Customer ID ex: 3987
+Lead/Customer ID ex: 1234
+```
+
+#### File Attachments
+/lead/attach
+
+Post Body:
+```javascript
+{
+  customerId: 1234,
+  fileName: 'Example : MAP Agreement',
+  mapUrl: 'https://example.com/map-agreement.pdf'
+}
+```
+
+Response:
+```javascript
+File/Attachment ID ex: 1234
 ```
 
 ### Resources
