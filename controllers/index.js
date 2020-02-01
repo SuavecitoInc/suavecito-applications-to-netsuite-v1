@@ -126,7 +126,7 @@ exports.createWholesaleLead = (req, res) => {
 
 exports.attachMapToWholesaleLead = (req, res) => {
   const data = req.body;
-  // customerId, fileName, fileUrl
+  // customerId, fileName, mapUrl
 
   // production
   const accountID = process.env.NETSUITE_ACCT_ID;
