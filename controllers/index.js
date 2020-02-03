@@ -3,6 +3,17 @@ const OAuth = require('oauth-1.0a');
 const crypto = require('crypto');
 const pdf2base64 = require('pdf-to-base64');
 
+// production
+const accountID = process.env.NETSUITE_ACCT_ID;
+const token = {
+  key: process.env.NETSUITE_ACCESS_TOKEN,
+  secret: process.env.NETSUITE_TOKEN_SECRET
+}
+const consumer = {
+  key: process.env.NETSUITE_CONSUMER_KEY,
+  secret: process.env.NETSUITE_CONSUMER_SECRET
+}
+
 exports.createWholesaleLead = (req, res) => {
   const data = req.body;
   console.log('LEAD DATA ========>');
@@ -72,17 +83,6 @@ exports.createWholesaleLead = (req, res) => {
   console.log(leadData);
   console.log('LEAD DATA END ===========>');
 
-  // production
-  const accountID = process.env.NETSUITE_ACCT_ID;
-  const token = {
-    key: process.env.NETSUITE_ACCESS_TOKEN,
-    secret: process.env.NETSUITE_TOKEN_SECRET
-  }
-  const consumer = {
-    key: process.env.NETSUITE_CONSUMER_KEY,
-    secret: process.env.NETSUITE_CONSUMER_SECRET
-  }
-
   const requestData = {
     url: process.env.NETSUITE_RESTLET_URL,
     method: 'POST'
@@ -128,16 +128,6 @@ exports.attachMapToWholesaleLead = (req, res) => {
   const data = req.body;
   // customerId, fileName, mapUrl
 
-  // production
-  const accountID = process.env.NETSUITE_ACCT_ID;
-  const token = {
-    key: process.env.NETSUITE_ACCESS_TOKEN,
-    secret: process.env.NETSUITE_TOKEN_SECRET
-  }
-  const consumer = {
-    key: process.env.NETSUITE_CONSUMER_KEY,
-    secret: process.env.NETSUITE_CONSUMER_SECRET
-  }
   const requestData = {
     url: process.env.NETSUITE_ADD_FILE_ATTACHMENTS_RESTLET_URL,
     method: 'POST'
