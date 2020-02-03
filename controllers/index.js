@@ -139,7 +139,7 @@ exports.attachMapToWholesaleLead = (req, res) => {
     secret: process.env.NETSUITE_CONSUMER_SECRET
   }
   const requestData = {
-    url: process.env.NETSUITE_USER_ATTACHMENTS_RESTLET_URL,
+    url: process.env.NETSUITE_ADD_FILE_ATTACHMENTS_RESTLET_URL,
     method: 'POST'
   }
   const oauth = OAuth({
@@ -162,10 +162,10 @@ exports.attachMapToWholesaleLead = (req, res) => {
       // data
       let fileData = {
         recordtype: 'file',
-        customerID: Number(data.customerId),
+        parentId: Number(data.customerId),
+        parentRecordType: data.parentRecordType,
         fileName: data.fileName,
         fileContents: base64data,
-        fileDescription: 'This is a CA Resale Certificate',
         fileType: 'pdf',
         folder: 753
       }
