@@ -68,10 +68,11 @@ exports.getRecord = async (recordType, recordId) => {
   return response;
 }
 
-exports.getCustomerByEmail = async email => {
+exports.getCustomerByFieldName = async (fieldName, fieldValue) => {
   // clean data
   let searchData = {
-    email: email
+    fieldName: fieldName,
+    fieldValue: fieldValue
   }
 
   const requestData = {

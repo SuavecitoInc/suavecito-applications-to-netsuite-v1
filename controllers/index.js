@@ -24,14 +24,10 @@ exports.getRecord = async (req, res) => {
   }
 }
 
-exports.getCustomerByEmail = async (req, res) => {
-  console.log('getting customer');
+exports.getCustomerByFieldName = async (req, res) => {
   const data = req.body;
-  let response = await helpers.getCustomerByEmail(data.email);
-  console.log('BACK IN ORIGINAL FUNC');
-  console.log(response);
+  let response = await helpers.getCustomerByFieldName(data.fieldName, data.fieldValue);
   if (response.success) {
-    console.log('SUCCESS');
     res.status(200).send({ id: response.id });
   } else {
     res.status(400).send(response.error);
@@ -97,7 +93,8 @@ exports.createWholesaleLead = (req, res) => {
     leadData.addressbook[0].label = "Billing & Shipping Address";
   }
 
-  if (data.contactFirstName !== data.billingFirstName) {
+  if (data.contactFirstName.trim().toLowerCase() + data.contactLastName.trim().toLowerCase() !==
+    data.billingFirstName.trim().toLowerCase() + data.billingLastName.trim().toLowerCase()) {
     leadData.secondContact = true;
   } else {
     leadData.secondContact = false;
