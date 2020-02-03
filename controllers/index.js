@@ -14,6 +14,30 @@ const consumer = {
   secret: process.env.NETSUITE_CONSUMER_SECRET
 }
 
+exports.getRecord = async (req, res) => {
+  const data = req.body;
+  let response = await helpers.getRecord(data.recordType, data.id);
+  if (response.success) {
+    res.status(200).send(response.content);
+  } else {
+    res.status(400).send(response.error);
+  }
+}
+
+exports.getCustomerByEmail = async (req, res) => {
+  console.log('getting customer');
+  const data = req.body;
+  let response = await helpers.getCustomerByEmail(data.email);
+  console.log('BACK IN ORIGINAL FUNC');
+  console.log(response);
+  if (response.success) {
+    console.log('SUCCESS');
+    res.status(200).send({ id: response.id });
+  } else {
+    res.status(400).send(response.error);
+  }
+}
+
 exports.createWholesaleLead = (req, res) => {
   const data = req.body;
   console.log('LEAD DATA ========>');
@@ -84,7 +108,7 @@ exports.createWholesaleLead = (req, res) => {
   console.log('LEAD DATA END ===========>');
 
   const requestData = {
-    url: process.env.NETSUITE_RESTLET_URL,
+    url: process.env.NETSUITE_LEAD_CREATION_RESTLET_URL,
     method: 'POST'
   }
 
@@ -124,7 +148,7 @@ exports.createWholesaleLead = (req, res) => {
   })();
 }
 
-exports.attachMapToWholesaleLead = (req, res) => {
+exports.attachFileToRecord = (req, res) => {
   const data = req.body;
   // customerId, fileName, mapUrl
 
@@ -151,7 +175,7 @@ exports.attachMapToWholesaleLead = (req, res) => {
 
       // data
       let fileData = {
-        recordtype: 'file',
+        recordType: 'file',
         parentId: Number(data.customerId),
         parentRecordType: data.parentRecordType,
         fileName: data.fileName,
@@ -190,4 +214,77 @@ exports.attachMapToWholesaleLead = (req, res) => {
       console.log(error);
       res.status(400).json({ error: error });
     });
+}
+
+exports.createSupportCase = async (req, res) => {
+  const data = req.body;
+  console.log('Company: ' + data.company);
+  // check if entity exists
+  let entity = await helpers.getRecord('customer', data.company);
+  // success = entity.content or error = entity.error
+
+  // clean data
+  let caseData = {
+    recordType: 'supportcase',
+    title: data.subject,
+    email: data.email,
+    incomingMessage: data.incomingMessage,
+    firstName: data.firstName,
+    lastName: data.lastName,
+    phone: data.phone,
+    category: data.category,
+    origin: data.origin,
+    // company: data.company, // setting below
+    profile: data.profile,
+    status: data.status,
+    customForm: data.customForm,
+    quickNote: 'Name: ' + data.firstName + ' ' + data.lastName,
+    priority: data.priority
+  }
+
+  if (entity.success) {
+    // entity found set customer
+    caseData.company = entity.content.id;
+  } else {
+    // set default customer if no customer found
+    caseData.company = 106;
+  }
+
+  const requestData = {
+    url: process.env.NETSUITE_CASE_CREATION_RESTLET_URL,
+    method: 'POST'
+  }
+
+  const oauth = OAuth({
+    consumer: consumer,
+    signature_method: 'HMAC-SHA1',
+    hash_function(base_string, key) {
+      return crypto
+        .createHmac('sha1', key)
+        .update(base_string)
+        .digest('base64');
+    },
+    realm: accountID
+  });
+
+  const authorization = oauth.authorize(requestData, token);
+  const header = oauth.toHeader(authorization);
+  header.Authorization += ', realm="' + accountID + '"';
+  header['content-type'] = 'application/json';
+  header['user-agent'] = 'SuavecitoApi/1.0 (Language=JavaScript/ES6)';
+
+  (async () => {
+    try {
+      const response = await fetch(requestData.url, {
+        method: requestData.method,
+        headers: header,
+        body: JSON.stringify(caseData)
+      });
+      const content = await response.json();
+
+      res.json(content);
+    } catch (err) {
+      console.log(err);
+    }
+  })();
 }
