@@ -217,8 +217,7 @@ exports.createSupportCase = async (req, res) => {
   const data = req.body;
   console.log('Company: ' + data.company);
   // check if entity exists
-  let entity = await helpers.getRecord('customer', data.company);
-  // success = entity.content or error = entity.error
+  let entity = await helpers.getCustomerByFieldName('email', data.email);
 
   // clean data
   let caseData = {
@@ -232,19 +231,19 @@ exports.createSupportCase = async (req, res) => {
     category: data.category,
     origin: data.origin,
     // company: data.company, // setting below
-    profile: data.profile,
-    status: data.status,
-    customForm: data.customForm,
+    profile: "1",
+    status: "1", // not started
+    customForm: "98",
     quickNote: 'Name: ' + data.firstName + ' ' + data.lastName,
-    priority: data.priority
+    priority: "3" // low
   }
 
   if (entity.success) {
     // entity found set customer
-    caseData.company = entity.content.id;
+    caseData.company = entity.id;
   } else {
     // set default customer if no customer found
-    caseData.company = 106;
+    caseData.company = 47962; // anonymous customer
   }
 
   const requestData = {
