@@ -92,6 +92,7 @@ exports.getCustomerByFieldName = async (fieldName, fieldValue) => {
     realm: accountID
   });
 
+  console.log('SEARCHING FOR CUSTOMER BY ' + fieldName + ' AND VALUE: ' + fieldValue);
   const authorization = oauth.authorize(requestData, token);
   const header = oauth.toHeader(authorization);
   header.Authorization += ', realm="' + accountID + '"';
@@ -108,9 +109,12 @@ exports.getCustomerByFieldName = async (fieldName, fieldValue) => {
       const content = await response.json();
       let data;
       if (content.error) {
+        console.log('CUSTOMER NOT FOUND');
         data = { success: false, error: content.error };
       } else {
-        data = { success: true, id: JSON.parse(content) };
+        const customerId = JSON.parse(content);
+        console.log('CUSTOMER FOUND, ID: ' + customerId);
+        data = { success: true, id: customerId };
       }
       return data;
     } catch (err) {
