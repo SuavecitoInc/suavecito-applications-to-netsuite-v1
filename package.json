@@ -1,7 +1,7 @@
 {
     "name": "suavecito-application-to-netsuite-v1",
     "version": "1.0.0",
-    "description": "Suavecito Lead Generator",
+    "description": "Suavecito to NetSuite",
     "main": "app.js",
     "scripts": {
         "start": "node app.js"
