@@ -36,8 +36,6 @@ exports.getCustomerByFieldName = async (req, res) => {
 
 exports.createWholesaleLead = (req, res) => {
   const data = req.body;
-  console.log('LEAD DATA ========>');
-  console.log(data);
 
   // clean data
   let leadData = {
@@ -100,10 +98,6 @@ exports.createWholesaleLead = (req, res) => {
     leadData.secondContact = false;
   }
 
-  console.log('LEAD DATA TO BE INSERTED ========>');
-  console.log(leadData);
-  console.log('LEAD DATA END ===========>');
-
   const requestData = {
     url: process.env.NETSUITE_LEAD_CREATION_RESTLET_URL,
     method: 'POST'
@@ -121,6 +115,7 @@ exports.createWholesaleLead = (req, res) => {
     realm: accountID
   });
 
+  console.log('POSTING TO NETSUITE');
   const authorization = oauth.authorize(requestData, token);
   const header = oauth.toHeader(authorization);
   header.Authorization += ', realm="' + accountID + '"';
@@ -135,9 +130,9 @@ exports.createWholesaleLead = (req, res) => {
         body: JSON.stringify(leadData)
       });
       const content = await response.json();
-      console.log('=========/ RESPONSE START =========/');
+      console.log('RESPONSE ========>');
       console.log(content);
-      console.log('/========= RESPONSE END /=========')
+
       res.status(200).json(content);
     } catch (err) {
       console.log(err);
@@ -167,9 +162,6 @@ exports.attachFileToRecord = (req, res) => {
 
   pdf2base64(data.mapUrl)
     .then(base64data => {
-      console.log('RESPONSE:');
-      console.log(base64data);
-
       // data
       let fileData = {
         recordType: 'file',
@@ -215,7 +207,7 @@ exports.attachFileToRecord = (req, res) => {
 
 exports.createSupportCase = async (req, res) => {
   const data = req.body;
-  console.log('Company: ' + data.company);
+
   // check if entity exists
   let entity = await helpers.getCustomerByFieldName('email', data.email);
 
@@ -263,11 +255,12 @@ exports.createSupportCase = async (req, res) => {
     realm: accountID
   });
 
+  console.log('POSTING TO NETSUITE');
   const authorization = oauth.authorize(requestData, token);
   const header = oauth.toHeader(authorization);
   header.Authorization += ', realm="' + accountID + '"';
   header['content-type'] = 'application/json';
-  header['user-agent'] = 'SuavecitoApi/1.0 (Language=JavaScript/ES6)';
+  header['user-agent'] = 'SuavecitoApplicationsToNetSuite/1.0 (AWS/Lambda US-West-1)';
 
   (async () => {
     try {
@@ -277,6 +270,8 @@ exports.createSupportCase = async (req, res) => {
         body: JSON.stringify(caseData)
       });
       const content = await response.json();
+      console.log('RESPONSE ========>');
+      console.log(content);
 
       res.json(content);
     } catch (err) {

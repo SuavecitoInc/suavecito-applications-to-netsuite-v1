@@ -42,7 +42,7 @@ exports.getRecord = async (recordType, recordId) => {
   const header = oauth.toHeader(authorization);
   header.Authorization += ', realm="' + accountID + '"';
   header['content-type'] = 'application/json';
-  header['user-agent'] = 'SuavecitoApi/1.0 (Language=JavaScript/ES6)';
+  header['user-agent'] = 'SuavecitoApplicationsToNetSuite/1.0 (AWS/Lambda US-West-1)';
 
   const fetchRecord = async () => {
     try {
@@ -96,7 +96,7 @@ exports.getCustomerByFieldName = async (fieldName, fieldValue) => {
   const header = oauth.toHeader(authorization);
   header.Authorization += ', realm="' + accountID + '"';
   header['content-type'] = 'application/json';
-  header['user-agent'] = 'SuavecitoApi/1.0 (Language=JavaScript/ES6)';
+  header['user-agent'] = 'SuavecitoApplicationsToNetSuite/1.0 (AWS/Lambda US-West-1)';
 
   const fetchRecord = async () => {
     try {
@@ -106,8 +106,6 @@ exports.getCustomerByFieldName = async (fieldName, fieldValue) => {
         body: JSON.stringify(searchData)
       });
       const content = await response.json();
-      console.log('CONTENT');
-      console.log(content);
       let data;
       if (content.error) {
         data = { success: false, error: content.error };
@@ -121,7 +119,5 @@ exports.getCustomerByFieldName = async (fieldName, fieldValue) => {
   };
 
   const response = await fetchRecord();
-  console.log('OUSTSIDE');
-  console.log(response);
   return response;
 }
