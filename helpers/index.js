@@ -106,17 +106,26 @@ exports.getCustomerByFieldName = async (fieldName, fieldValue) => {
         headers: header,
         body: JSON.stringify(searchData)
       });
-      const content = await response.json();
+
+      let content = await response.json();
       let data;
+
       if (content.error) {
         console.log('CUSTOMER NOT FOUND');
         data = { success: false, error: content.error };
       } else {
-        const customerId = JSON.parse(content);
-        console.log('CUSTOMER FOUND, ID: ' + customerId);
-        data = { success: true, id: customerId };
+        content = JSON.parse(content);
+        if (content.customer) {
+          console.log('CUSTOMER FOUND, ID: ' + content.id);
+          data = { success: true, id: content.id };
+        } else {
+          console.log('CUSTOMER NOT FOUND');
+          data = { success: false, error: 'Customer not found' };
+        }
       }
+
       return data;
+
     } catch (err) {
       console.log(err);
     }
