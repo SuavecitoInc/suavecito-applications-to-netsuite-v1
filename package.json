@@ -2,6 +2,7 @@
     "name": "suavecito-application-to-netsuite-v1",
     "version": "1.0.0",
     "description": "Suavecito to NetSuite",
+    "author": "Jose A. Rivera <jose.alfredo.rivera@gmail.com>",
     "main": "app.js",
     "scripts": {
         "start": "node app.js"
